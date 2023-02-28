@@ -19,6 +19,7 @@
 		498944D129ACFEE800C4D18E /* PhotosResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498944D029ACFEE800C4D18E /* PhotosResponse.swift */; };
 		498944D329ACFF3700C4D18E /* Photos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498944D229ACFF3700C4D18E /* Photos.swift */; };
 		498944D529AD05F700C4D18E /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498944D429AD05F700C4D18E /* Photo.swift */; };
+		49B8F23A29AE231E00F56BCF /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B8F23929AE231E00F56BCF /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		498944D029ACFEE800C4D18E /* PhotosResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosResponse.swift; sourceTree = "<group>"; };
 		498944D229ACFF3700C4D18E /* Photos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photos.swift; sourceTree = "<group>"; };
 		498944D429AD05F700C4D18E /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		49B8F23929AE231E00F56BCF /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,8 +80,8 @@
 		494DE26B29AC772C00379D3A /* App */ = {
 			isa = PBXGroup;
 			children = (
-				494DE25729AC76C600379D3A /* AppDelegate.swift */,
-				494DE25929AC76C600379D3A /* SceneDelegate.swift */,
+				49B8F23729AE22FF00F56BCF /* Core */,
+				49B8F23629AE22E100F56BCF /* Delegates */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -165,6 +167,31 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		49B8F23629AE22E100F56BCF /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				494DE25729AC76C600379D3A /* AppDelegate.swift */,
+				494DE25929AC76C600379D3A /* SceneDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		49B8F23729AE22FF00F56BCF /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				49B8F23829AE230400F56BCF /* Networking */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		49B8F23829AE230400F56BCF /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				49B8F23929AE231E00F56BCF /* NetworkManager.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -237,6 +264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49B8F23A29AE231E00F56BCF /* NetworkManager.swift in Sources */,
 				498944D529AD05F700C4D18E /* Photo.swift in Sources */,
 				498944C529ACB50600C4D18E /* PhotoTableViewCell.swift in Sources */,
 				494DE25C29AC76C600379D3A /* RecentPhotosTableViewController.swift in Sources */,

@@ -11,9 +11,13 @@ class RecentPhotosTableViewController: UITableViewController, UISearchResultsUpd
     
     private var response: PhotosResponse? {
         didSet {
-            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
+    
+    private var selectedPhoto: Photo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +34,7 @@ class RecentPhotosTableViewController: UITableViewController, UISearchResultsUpd
     }
     
     private func fetchRecentPhotos() {
-        guard let url = URL(string: "https://www.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=41d3554f3ced4d0edb19c3e0d8cdba00&format=json&nojsoncallback=1&extras=description,license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tag,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_q,url_m,url_n,url_z,url_c,url_l,url_o") else {return}
+        guard let url = URL(string: "https://www.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=41d3554f3ced4d0edb19c3e0d8cdba00&format=json&nojsoncallback=1&extras=description,owner_name,icon_server,url_n,url_z") else {return}
         let request = URLRequest(url: url)
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -38,13 +42,15 @@ class RecentPhotosTableViewController: UITableViewController, UISearchResultsUpd
                 return
             }
             if let data = data, let response = try? JSONDecoder().decode(PhotosResponse.self, from: data) {
-                self.response = response
+                DispatchQueue.main.async {
+                    self.response = response
+                }
             }
         }.resume()
     }
     
     private func searchPhotos(with text: String) {
-        guard let url = URL(string: "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=41d3554f3ced4d0edb19c3e0d8cdba00&text=flower&format=json&nojsoncallback=1&extras=description,license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tag,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_q,url_m,url_n,url_z,url_c,url_l,url_o") else {return}
+        guard let url = URL(string: "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=41d3554f3ced4d0edb19c3e0d8cdba00&text=\(text)&format=json&nojsoncallback=1&extras=description,owner_name,icon_server,url_n,url_z") else {return}
         let request = URLRequest(url: url)
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -52,7 +58,9 @@ class RecentPhotosTableViewController: UITableViewController, UISearchResultsUpd
                 return
             }
             if let data = data, let response = try? JSONDecoder().decode(PhotosResponse.self, from: data) {
-                self.response = response
+                DispatchQueue.main.async {
+                    self.response = response
+                }
             }
         }.resume()
     }
@@ -64,27 +72,39 @@ class RecentPhotosTableViewController: UITableViewController, UISearchResultsUpd
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return response?.photos?.photo?.count ?? .zero
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let photo = response?.photos?.photo?[indexPath.row]
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PhotoTableViewCell
+        
         cell.ownerImageView.backgroundColor = .darkGray
-        cell.ownerNameLabel.text = "Owner Name"
-        cell.photoImageView.backgroundColor = .red
-        cell.titleLabel.text = "Title Label"
+        cell.ownerNameLabel.text = photo?.ownername
+        
+        NetworkManager.shared.fetchImage(with: photo?.buddyIconUrl) { data in
+            cell.photoImageView.image = UIImage(data: data)
+        }
+        
+        NetworkManager.shared.fetchImage(with: photo?.urlN) { data in
+            cell.photoImageView.image = UIImage(data: data)
+        }
+        
+        cell.titleLabel.text = photo?.title
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //navigationController?.pushViewController(PhotoDetailViewController(), animated: true) (do not choose this way)
         performSegue(withIdentifier: "detailSegue", sender: nil)
+        selectedPhoto = response?.photos?.photo?[indexPath.row]
     }
  //MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let viewConroller = segue.destination as? PhotoDetailViewController {
-            // TODO: Send the selected photo to the Detail Screen!
+            viewConroller.photo = selectedPhoto
         }
     }
     // MARK: - Update Search Results
