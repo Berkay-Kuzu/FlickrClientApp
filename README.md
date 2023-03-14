@@ -2,7 +2,7 @@
 
 FlickrClientApp is an app which works with Flickr API. Users can search everything they want and see the result easily.
 
-#Video and Images
+# Video and Images
 
 https://user-images.githubusercontent.com/92036779/224966239-57c28b5a-35dc-4ac2-aa4d-507778ee0892.mp4
 
